@@ -1,0 +1,36 @@
+{
+  "name": "FFBE Builds",
+  "short_name": "FFBE Builds",
+  "manifest_version": 2,
+  "description": "View FFBE Builds inline from FFBE Equip.",
+  "version": "0.1",
+  "homepage_url": "https://github.com/NullParameter/ffbebuilds",
+  "browser_action": {
+    "default_icon": "robe.png",
+    "default_title": "FFBE Builds"
+  },
+  "icons": {
+    "128": "robe.png"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "*://*.reddit.com/*"
+      ],
+      "js": [
+        "app/lib/jquery-3.2.1.min.js",
+        "app/lib/exportBuildAsImage.js",
+        "app/scripts/ffbebuilds.js"
+      ],
+      "css": [
+        "app/styles/ffbebuilds.css"
+      ]
+    }
+  ],
+  "permissions": [
+    "https://*/*"
+  ],
+  "web_accessible_resources": [
+    "app/scripts/*"
+  ]
+}
