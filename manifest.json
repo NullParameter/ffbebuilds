@@ -19,9 +19,9 @@
       ],
       "js": [
         "app/lib/jquery-3.2.1.min.js",
-        "app/scripts/ffbebuilds.js"
+        "app/scripts/ffbebuilds.js",
+        "app/lib/exportBuildAsImage.js"
       ],
-        "app/lib/exportBuildAsImage.js",
       "css": [
         "app/styles/ffbebuilds.css"
       ]
