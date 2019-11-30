@@ -3,7 +3,7 @@
   "short_name": "FFBE Builds",
   "manifest_version": 2,
   "description": "View FFBE Builds inline from FFBE Equip.",
-  "version": "0.1",
+  "version": "0.2",
   "homepage_url": "https://github.com/NullParameter/ffbebuilds",
   "browser_action": {
     "default_icon": "icon.png",
@@ -12,6 +12,13 @@
   "icons": {
     "128": "icon.png"
   },
+  "background": {
+    "scripts": [
+      "app/lib/jquery-3.2.1.min.js",
+      "app/lib/browser-polyfill.min.js",
+      "app/scripts/background.js"
+    ]
+  },
   "content_scripts": [
     {
       "matches": [
@@ -19,8 +26,9 @@
       ],
       "js": [
         "app/lib/jquery-3.2.1.min.js",
-        "app/scripts/ffbebuilds.js",
-        "app/lib/exportBuildAsImage.js"
+        "app/lib/browser-polyfill.min.js",
+        "app/lib/exportBuildAsImage.js",
+        "app/scripts/ffbebuilds.js"
       ],
       "css": [
         "app/styles/ffbebuilds.css"
@@ -28,7 +36,9 @@
     }
   ],
   "permissions": [
-    "https://*/*"
+    "storage",
+    "https://*/*",
+    "unlimitedStorage"
   ],
   "web_accessible_resources": [
     "app/scripts/*"

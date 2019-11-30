@@ -1,1 +1,342 @@
-FFBEEquipBuildAsImage = { unitLineHeight: 235, drawTeam: function (a, b) { a.height = FFBEEquipBuildAsImage.unitLineHeight * b.units.length; let c = a.getContext("2d"); c.clearRect(0, 0, a.width, a.height), b.units.forEach((a, b) => FFBEEquipBuildAsImage.drawBuild(c, a, b)), c.fillStyle = "white", c.textAlign = "start", c.textBaseline = "bottom", c.font = "8px Arial" }, drawBuild: function (a, b, c = 0) { var d = Math.min; let e = a.createLinearGradient(0, 0, 900, 235); e.addColorStop(0, "#0000b2"), e.addColorStop(1, "#00002d"), a.fillStyle = e, a.fillRect(4, 4 + c * FFBEEquipBuildAsImage.unitLineHeight, 726, 226), FFBEEquipBuildAsImage.drawImage(a, "https://ffbeEquip.com/img/box.png", 0, 0 + c * FFBEEquipBuildAsImage.unitLineHeight, 730, 235); let f = b.id, g = f.substr(0, f.length - 1) + b.rarity; FFBEEquipBuildAsImage.drawImageCentered(a, `https://ffbeEquip.com/img/units/unit_ills_${g}.png`, 52, 52 + c * FFBEEquipBuildAsImage.unitLineHeight, 1, () => { let e = 105, f = 20 + c * FFBEEquipBuildAsImage.unitLineHeight; a.fillStyle = "white", a.strokeStyle = "white", a.textAlign = "start", a.textBaseline = "bottom", a.font = "italic 12px Arial", a.fillText("HP", e, f + 20), a.fillText("MP", e + 100, f + 20), a.fillText("ATK", e, f + 40), a.fillText("MAG", e + 100, f + 40), a.fillText("DEF", e, f + 60), a.fillText("SPR", e + 100, f + 60), a.font = "bold 18px Arial", a.textAlign = "end"; let g = 0, h = 0;["hp", "mp", "atk", "mag", "def", "spr"].forEach(c => { a.fillText(b.calculatedValues[c].value, e + 80 + 100 * h, f + 21 + 20 * g), b.pots[c] && (a.strokeStyle = "black", a.beginPath(), a.moveTo(e + 85 + 100 * h, f + 18 + 20 * g), a.lineTo(e + 85 + 100 * h, f + 3 + 20 * g), a.stroke(), a.strokeStyle = "#00ff00", a.beginPath(), a.moveTo(e + 85 + 100 * h, f + 18 + 20 * g), a.lineTo(e + 85 + 100 * h, f + 18 + 20 * g - 15 * d(1, b.pots[c] / b.maxPots[c])), a.stroke()), b.pots[c] > b.maxPots[c] && (a.strokeStyle = "black", a.beginPath(), a.moveTo(e + 88 + 100 * h, f + 18 + 20 * g), a.lineTo(e + 88 + 100 * h, f + 3 + 20 * g), a.stroke(), a.strokeStyle = "#00ff00", a.beginPath(), a.moveTo(e + 88 + 100 * h, f + 18 + 20 * g), a.lineTo(e + 88 + 100 * h, f + 18 + 20 * g - 15 * d(1, (b.pots[c] - b.maxPots[c]) / (b.maxPots[c] / 2))), a.stroke()), h++ , 2 === h && (g++ , h = 0) }), b.esperId ? (FFBEEquipBuildAsImage.drawImage(a, `https://ffbeEquip.com/img/espers/${b.esperId}.jpg`, e + 205, f, 50, 50, 1, !0), FFBEEquipBuildAsImage.drawText(a, b.esperId.replace("_", " "), "bold", 12, "center", "middle", e + 230, f + 60, 130)) : (FFBEEquipBuildAsImage.drawImage(a, `https://ffbeEquip.com/img/espers/ALL.png`, e + 205, f, 50, 50), FFBEEquipBuildAsImage.drawText(a, "No esper", "bold", 12, "center", "middle", e + 230, f + 60, 130)), a.textBaseline = "bottom"; let i = [{ name: "Evasion", value: b.calculatedValues.physicalEvasion.value }, { name: "Provoke", value: b.calculatedValues.drawAttacks.value }, { name: "LB Dmg", value: b.calculatedValues.lbDamage.value }, { name: "MP/turn", value: b.calculatedValues.mpRefresh.value * b.calculatedValues.mp.value / 100 }, { name: "LB/turn", value: b.calculatedValues.lbPerTurn.value }, { name: "LB fill", value: b.calculatedValues.lbFillRate.value }, { name: "Jmp Dmg", value: b.calculatedValues.jumpDamage.value }]; e = 25, f = 95 + c * FFBEEquipBuildAsImage.unitLineHeight, g = 0, h = 0, i.forEach(b => { b.value && (a.textAlign = "start", a.fillStyle = "white", a.strokeStyle = "black", a.font = "italic 12px Arial", a.fillText(b.name, e + 100 * h, f + 20 * g + 20), a.font = "bold 14px Arial", a.textAlign = "end", a.fillText(b.value, e + 100 * h + 80, f + 20 * g + 20), h++ , 3 == h && (g++ , h = 0)) }) }); let h = 375, i = 5 + c * FFBEEquipBuildAsImage.unitLineHeight; b.items.forEach((c, d) => { if (c) { let e = Math.floor(c.slot / 2), f = c.slot % 2; FFBEEquipBuildAsImage.drawImage(a, `https://ffbeEquip.com/img/items/${c.icon}`, h + 170 * f, i + 30 * e, 40, 40); let g = "white"; b.itemEnchantments[d] && (g = "#e74c3c"), FFBEEquipBuildAsImage.drawText(a, c.name, "bold", 12, "start", "middle", h + 40 + 170 * f, i + 30 * e + 20, 130, g) } }); let j = "#ff0000", k = "#00ff00"; h = 10, i = 164 + c * FFBEEquipBuildAsImage.unitLineHeight, ["fire", "ice", "lightning", "water", "wind", "earth", "light", "dark"].forEach((c, d) => { let e = h, f = i, g = 1, l = b.calculatedValues.elementResists[c]; l || (g = .4); let m = k; 0 > l && (m = j), FFBEEquipBuildAsImage.drawImage(a, `https://ffbeEquip.com/img/icons/elements/${c}.png`, h + 30 * d, i, 30, 30, g, !1, () => { if (l) { a.font = "bold 14px Arial"; let b = a.measureText(l).width; a.fillStyle = "black", a.globalAlpha = 1, a.fillRect(e + 29 - b + 30 * d, f + 16, b, 12), FFBEEquipBuildAsImage.drawText(a, l, "bold", 12, "end", "bottom", e + 28 + 30 * d, f + 30, 0, m) } }) }), h = 10, i = 196 + c * FFBEEquipBuildAsImage.unitLineHeight, ["poison", "blind", "sleep", "silence", "paralysis", "confuse", "disease", "petrification", "death", "charm", "stop"].forEach((c, e) => { let f = h, g = i, l = 1, m = d(100, b.calculatedValues.ailmentResists[c]); m || (l = .4); let n = k; 0 > m && (n = j), FFBEEquipBuildAsImage.drawImage(a, `https://ffbeEquip.com/img/icons/ailments/${c}.png`, h + 30 * e, i, 30, 30, l, !1, () => { if (m) { a.font = "bold 14px Arial"; let b = a.measureText(m).width; a.fillStyle = "black", a.globalAlpha = 1, a.fillRect(f + 29 - b + 30 * e, g + 16, b, 12), FFBEEquipBuildAsImage.drawText(a, m, "bold", 12, "end", "bottom", f + 28 + 30 * e, g + 30, 0, n) } }) }); let l = ["aquatic", "beast", "bird", "bug", "demon", "dragon", "human", "machine", "plant", "undead", "stone", "spirit"]; h = 355, i = 164 + c * FFBEEquipBuildAsImage.unitLineHeight, l.forEach((c, d) => { let e = h, f = i, g = 1, j = b.calculatedValues.killers[c].physical; j || (g = .4), FFBEEquipBuildAsImage.drawImage(a, `https://ffbeEquip.com/img/icons/killers/physical-${c}.png`, h + 30 * d, i, 30, 30, g, !1, () => { if (j) { a.font = "bold 14px Arial"; let b = a.measureText(j).width; a.fillStyle = "black", a.globalAlpha = .5, a.fillRect(e + 29 - b + 30 * d, f + 16, b, 12), FFBEEquipBuildAsImage.drawText(a, j, "bold", 12, "end", "bottom", e + 28 + 30 * d, f + 30) } }) }), h = 355, i = 196 + c * FFBEEquipBuildAsImage.unitLineHeight, l.forEach((c, d) => { let e = h, f = i, g = 1, j = b.calculatedValues.killers[c].magical; j || (g = .4), FFBEEquipBuildAsImage.drawImage(a, `https://ffbeEquip.com/img/icons/killers/magical-${c}.png`, h + 30 * d, i, 30, 30, g, !1, () => { if (j) { a.font = "bold 14px Arial"; let b = a.measureText(j).width; a.fillStyle = "black", a.globalAlpha = .5, a.fillRect(e + 29 - b + 30 * d, f + 16, b, 12), FFBEEquipBuildAsImage.drawText(a, j, "bold", 12, "end", "bottom", e + 28 + 30 * d, f + 30) } }) }) }, drawImage: function (a, b, c, d, e, f, g = 1, h = !1, i) { let j = new Image; j.onload = () => { a.globalAlpha = g, h && (a.save(), FFBEEquipBuildAsImage.roundedImagePath(a, c, d, e, f), a.clip()), a.drawImage(j, c, d, e, f), h && a.restore(), i && i() }, j.src = b }, drawImageCentered: function (a, b, c, d, e, f) { let g = new Image; g.onload = () => { let b = g.width * e, i = g.height * e; a.globalAlpha = 1, a.drawImage(g, c - b / 2, d - i / 2, b, i), f && f() }, g.src = b }, roundedImagePath: function (a, b, c, d, e) { a.beginPath(), a.moveTo(b + 10, c), a.lineTo(b + d - 10, c), a.quadraticCurveTo(b + d, c, b + d, c + 10), a.lineTo(b + d, c + e - 10), a.quadraticCurveTo(b + d, c + e, b + d - 10, c + e), a.lineTo(b + 10, c + e), a.quadraticCurveTo(b, c + e, b, c + e - 10), a.lineTo(b, c + 10), a.quadraticCurveTo(b, c, b + 10, c), a.closePath() }, drawText: function (a, b, c, d, e, f, g, h, i, j = "white") { let k = d + "px Arial"; c && (k = c + " " + k), a.globalAlpha = 1, a.font = k, a.textBaseline = f, a.textAlign = e, a.fillStyle = j; let l = []; l = i ? FFBEEquipBuildAsImage.getLines(a, b, i) : [b]; let m = 0; "middle" === f && (m = -(l.length - 1) * (d + 2) / 2); for (let k = 0; k < l.length; k++)a.fillText(l[k], g, m + h + k * (d + 2)) }, getLines: function (a, b, c) { for (var d = b.split(" "), e = [], f = d[0], g = 1; g < d.length; g++) { var h = d[g], j = a.measureText(f + " " + h).width; j < c ? f += " " + h : (e.push(f), f = h) } return e.push(f), e } };
+FFBEEquipBuildAsImage = {
+  unitLineHeight: 235,
+  ffbeEquipUrl: "https://ffbeEquip.com",
+  drawTeam: function (canvas, data) {
+    canvas.height = FFBEEquipBuildAsImage.unitLineHeight * data.units.length;
+    let ctx = canvas.getContext('2d');
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    data.units.forEach((unit, index) => FFBEEquipBuildAsImage.drawBuild(ctx, unit, index));
+
+    ctx.fillStyle = 'white';
+    ctx.textAlign = "start"
+    ctx.textBaseline = "bottom";
+    ctx.font = "8px Arial";
+  },
+
+
+  drawBuild: function (ctx, unit, unitLine = 0) {
+
+    let grd = ctx.createLinearGradient(0, 0, 900, 235);
+    grd.addColorStop(0, "#0000b2");
+    grd.addColorStop(1, "#00002d");
+
+    // Fill with gradient
+    ctx.fillStyle = grd;
+    ctx.fillRect(4, 4 + unitLine * FFBEEquipBuildAsImage.unitLineHeight, 726, 226);
+
+    FFBEEquipBuildAsImage.drawImage(ctx, FFBEEquipBuildAsImage.ffbeEquipUrl + '/img/box.png', 0, 0 + unitLine * FFBEEquipBuildAsImage.unitLineHeight, 730, 235);
+
+    let unitId = unit.id;
+    let iconId = unitId.substr(0, unitId.length - 1) + unit.rarity;
+    FFBEEquipBuildAsImage.drawImageCentered(ctx, FFBEEquipBuildAsImage.ffbeEquipUrl + `/img/units/unit_ills_${iconId}.png`, 52, 52 + unitLine * FFBEEquipBuildAsImage.unitLineHeight, 1, () => {
+
+      let x = 105;
+      let y = 20 + unitLine * FFBEEquipBuildAsImage.unitLineHeight;
+      ctx.fillStyle = 'white';
+      ctx.strokeStyle = 'white';
+      ctx.textAlign = "start"
+      ctx.textBaseline = "bottom";
+      ctx.font = "italic 12px Arial";
+      ctx.fillText("HP", x, y + 20);
+      ctx.fillText("MP", x + 100, y + 20);
+      ctx.fillText("ATK", x, y + 40);
+      ctx.fillText("MAG", x + 100, y + 40);
+      ctx.fillText("DEF", x, y + 60);
+      ctx.fillText("SPR", x + 100, y + 60);
+
+      ctx.font = "bold 18px Arial";
+      ctx.textAlign = "end"
+      let line = 0;
+      let column = 0;
+      ["hp", "mp", "atk", "mag", "def", "spr"].forEach(stat => {
+        ctx.fillText(unit.calculatedValues[stat].value, x + 80 + column * 100, y + 21 + line * 20);
+        if (unit.pots[stat]) {
+          ctx.strokeStyle = 'black';
+          ctx.beginPath();
+          ctx.moveTo(x + 85 + column * 100, y + 18 + line * 20);
+          ctx.lineTo(x + 85 + column * 100, y + 3 + line * 20);
+          ctx.stroke();
+
+          ctx.strokeStyle = '#00ff00';
+          ctx.beginPath();
+          ctx.moveTo(x + 85 + column * 100, y + 18 + line * 20);
+          ctx.lineTo(x + 85 + column * 100, y + 18 + line * 20 - (15 * Math.min(1, unit.pots[stat] / unit.maxPots[stat])));
+          ctx.stroke();
+        }
+
+        if (unit.pots[stat] > unit.maxPots[stat]) {
+          ctx.strokeStyle = 'black';
+          ctx.beginPath();
+          ctx.moveTo(x + 88 + column * 100, y + 18 + line * 20);
+          ctx.lineTo(x + 88 + column * 100, y + 3 + line * 20);
+          ctx.stroke();
+
+          ctx.strokeStyle = '#00ff00';
+          ctx.beginPath();
+          ctx.moveTo(x + 88 + column * 100, y + 18 + line * 20);
+          ctx.lineTo(x + 88 + column * 100, y + 18 + line * 20 - (15 * Math.min(1, (unit.pots[stat] - unit.maxPots[stat]) / (unit.maxPots[stat] / 2))));
+          ctx.stroke();
+        }
+
+        column++;
+        if (column === 2) {
+          line++;
+          column = 0;
+        }
+      });
+
+
+
+      if (unit.esperId) {
+        FFBEEquipBuildAsImage.drawImage(ctx, FFBEEquipBuildAsImage.ffbeEquipUrl + `/img/espers/${unit.esperId}.jpg`, x + 205, y, 50, 50, 1, true);
+        FFBEEquipBuildAsImage.drawText(ctx, unit.esperId.replace('_', ' '), 'bold', 12, 'center', 'middle', x + 230, y + 60, 130);
+      } else {
+        FFBEEquipBuildAsImage.drawImage(ctx, FFBEEquipBuildAsImage.ffbeEquipUrl + `/img/espers/ALL.png`, x + 205, y, 50, 50);
+        FFBEEquipBuildAsImage.drawText(ctx, 'No esper', 'bold', 12, 'center', 'middle', x + 230, y + 60, 130);
+      }
+
+      ctx.textBaseline = "bottom";
+      let additionalValues = [
+        { "name": "Evasion", "value": unit.calculatedValues.physicalEvasion.value },
+        { "name": "Provoke", "value": unit.calculatedValues.drawAttacks.value },
+        { "name": "LB Dmg", "value": unit.calculatedValues.lbDamage.value },
+        { "name": "MP/turn", "value": unit.calculatedValues.mpRefresh.value * unit.calculatedValues.mp.value / 100 },
+        { "name": "LB/turn", "value": unit.calculatedValues.lbPerTurn.value },
+        { "name": "LB fill", "value": unit.calculatedValues.lbFillRate.value },
+        { "name": "Jmp Dmg", "value": unit.calculatedValues.jumpDamage.value },
+
+      ];
+      x = 25;
+      y = 95 + unitLine * FFBEEquipBuildAsImage.unitLineHeight;
+      line = 0;
+      column = 0;
+      additionalValues.forEach(valueData => {
+        if (valueData.value) {
+          ctx.textAlign = "start"
+          ctx.fillStyle = 'white';
+          ctx.strokeStyle = 'black';
+          ctx.font = "italic 12px Arial";
+          ctx.fillText(valueData.name, x + column * 100, y + line * 20 + 20);
+          ctx.font = "bold 14px Arial";
+          ctx.textAlign = "end"
+          ctx.fillText(valueData.value, x + column * 100 + 80, y + line * 20 + 20);
+          column++;
+          if (column == 3) {
+            line++;
+            column = 0;
+          }
+        }
+      });
+
+    });
+
+    let x = 375;
+    let y = 5 + unitLine * FFBEEquipBuildAsImage.unitLineHeight;
+
+    unit.items.forEach((item, index) => {
+      if (item) {
+        let line = Math.floor(item.slot / 2);
+        let column = item.slot % 2;
+        FFBEEquipBuildAsImage.drawImage(ctx, FFBEEquipBuildAsImage.ffbeEquipUrl + `/img/items/${item.icon}`, x + column * 170, y + line * 30, 40, 40);
+        let color = 'white';
+        if (unit.itemEnchantments[index]) {
+          color = '#e74c3c';
+        }
+        FFBEEquipBuildAsImage.drawText(ctx, item.name, 'bold', 12, 'start', 'middle', x + 40 + column * 170, y + line * 30 + 20, 130, color);
+      }
+    });
+
+    let red = '#ff0000';
+    let green = '#00ff00';
+    x = 10;
+    y = 164 + unitLine * FFBEEquipBuildAsImage.unitLineHeight;
+    ['fire', 'ice', 'lightning', 'water', 'wind', 'earth', 'light', 'dark'].forEach((element, index) => {
+      let savedX = x;
+      let savedY = y;
+      let alpha = 1;
+      let resist = unit.calculatedValues.elementResists[element];
+      if (!resist) {
+        alpha = 0.4;
+      }
+      let color = green;
+      if (resist < 0) {
+        color = red;
+      }
+
+      FFBEEquipBuildAsImage.drawImage(ctx, FFBEEquipBuildAsImage.ffbeEquipUrl + `/img/icons/elements/${element}.png`, x + index * 30, y, 30, 30, alpha, false, () => {
+        if (resist) {
+          ctx.font = "bold 14px Arial";
+          let textWidth = ctx.measureText(resist).width;
+          ctx.fillStyle = 'black';
+          ctx.globalAlpha = 1;
+          ctx.fillRect(savedX + 29 - textWidth + index * 30, savedY + 16, textWidth, 12);
+          FFBEEquipBuildAsImage.drawText(ctx, resist, 'bold', 12, 'end', 'bottom', savedX + 28 + index * 30, savedY + 30, 0, color);
+        }
+      });
+    });
+    x = 10;
+    y = 196 + unitLine * FFBEEquipBuildAsImage.unitLineHeight;
+    ['poison', 'blind', 'sleep', 'silence', 'paralysis', 'confuse', 'disease', 'petrification', 'death', "charm", "stop"].forEach((ailment, index) => {
+      let savedX = x;
+      let savedY = y;
+      let alpha = 1;
+      let resist = Math.min(100, unit.calculatedValues.ailmentResists[ailment]);
+      if (!resist) {
+        alpha = 0.4;
+      }
+      let color = green;
+      if (resist < 0) {
+        color = red;
+      }
+      FFBEEquipBuildAsImage.drawImage(ctx, FFBEEquipBuildAsImage.ffbeEquipUrl + `/img/icons/ailments/${ailment}.png`, x + index * 30, y, 30, 30, alpha, false, () => {
+        if (resist) {
+          ctx.font = "bold 14px Arial";
+          let textWidth = ctx.measureText(resist).width;
+          ctx.fillStyle = 'black';
+          ctx.globalAlpha = 1;
+          ctx.fillRect(savedX + 29 - textWidth + index * 30, savedY + 16, textWidth, 12);
+          FFBEEquipBuildAsImage.drawText(ctx, resist, 'bold', 12, 'end', 'bottom', savedX + 28 + index * 30, savedY + 30, 0, color);
+        }
+      });
+    });
+
+    let races = ['aquatic', 'beast', 'bird', 'bug', 'demon', 'dragon', 'human', 'machine', 'plant', 'undead', 'stone', 'spirit'];
+
+    x = 355;
+    y = 164 + unitLine * FFBEEquipBuildAsImage.unitLineHeight;
+    races.forEach((race, index) => {
+      let savedX = x;
+      let savedY = y;
+      let alpha = 1;
+      let killer = unit.calculatedValues.killers[race].physical;
+      if (!killer) {
+        alpha = 0.4;
+      }
+      FFBEEquipBuildAsImage.drawImage(ctx, FFBEEquipBuildAsImage.ffbeEquipUrl + `/img/icons/killers/physical-${race}.png`, x + index * 30, y, 30, 30, alpha, false, () => {
+        if (killer) {
+          ctx.font = "bold 14px Arial";
+          let textWidth = ctx.measureText(killer).width;
+          ctx.fillStyle = 'black';
+          ctx.globalAlpha = 0.5;
+          ctx.fillRect(savedX + 29 - textWidth + index * 30, savedY + 16, textWidth, 12);
+          FFBEEquipBuildAsImage.drawText(ctx, killer, 'bold', 12, 'end', 'bottom', savedX + 28 + index * 30, savedY + 30);
+        }
+      });
+    });
+
+    x = 355;
+    y = 196 + unitLine * FFBEEquipBuildAsImage.unitLineHeight;
+    races.forEach((race, index) => {
+      let savedX = x;
+      let savedY = y;
+      let alpha = 1;
+      let killer = unit.calculatedValues.killers[race].magical;
+      if (!killer) {
+        alpha = 0.4;
+      }
+      FFBEEquipBuildAsImage.drawImage(ctx, FFBEEquipBuildAsImage.ffbeEquipUrl + `/img/icons/killers/magical-${race}.png`, x + index * 30, y, 30, 30, alpha, false, () => {
+        if (killer) {
+          ctx.font = "bold 14px Arial";
+          let textWidth = ctx.measureText(killer).width;
+          ctx.fillStyle = 'black';
+          ctx.globalAlpha = 0.5;
+          ctx.fillRect(savedX + 29 - textWidth + index * 30, savedY + 16, textWidth, 12);
+          FFBEEquipBuildAsImage.drawText(ctx, killer, 'bold', 12, 'end', 'bottom', savedX + 28 + index * 30, savedY + 30);
+        }
+      });
+    });
+  },
+
+  drawImage: function (ctx, imageUrl, x, y, w, h, alpha = 1, rounded = false, callback) {
+    let image = new Image();
+    image.onload = () => {
+      ctx.globalAlpha = alpha;
+      if (rounded) {
+        ctx.save();
+        FFBEEquipBuildAsImage.roundedImagePath(ctx, x, y, w, h);
+        ctx.clip();
+      }
+      ctx.drawImage(image, x, y, w, h);
+      if (rounded) {
+        ctx.restore();
+      }
+      if (callback) {
+        callback();
+      }
+    }
+    image.src = imageUrl;
+  },
+
+  drawImageCentered: function (ctx, imageUrl, x, y, ratio, callback) {
+    let image = new Image();
+    image.onload = () => {
+      let w = image.width * ratio;
+      let h = image.height * ratio;
+      ctx.globalAlpha = 1;
+      ctx.drawImage(image, x - w / 2, y - h / 2, w, h);
+      if (callback) {
+        callback();
+      }
+    }
+    image.src = imageUrl;
+  },
+
+  roundedImagePath: function (ctx, x, y, width, height) {
+    let radius = 10;
+    ctx.beginPath();
+    ctx.moveTo(x + radius, y);
+    ctx.lineTo(x + width - radius, y);
+    ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
+    ctx.lineTo(x + width, y + height - radius);
+    ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+    ctx.lineTo(x + radius, y + height);
+    ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
+    ctx.lineTo(x, y + radius);
+    ctx.quadraticCurveTo(x, y, x + radius, y);
+    ctx.closePath();
+  },
+
+  drawText: function (ctx, text, style, size, textAlign, textBaseline, x, y, maxX, color = 'white') {
+    let font = size + 'px Arial';
+    if (style) {
+      font = style + ' ' + font;
+    }
+    ctx.globalAlpha = 1;
+    ctx.font = font;
+    ctx.textBaseline = textBaseline;
+    ctx.textAlign = textAlign;
+    ctx.fillStyle = color;
+    let lines = [];
+    if (maxX) {
+      lines = FFBEEquipBuildAsImage.getLines(ctx, text, maxX);
+    } else {
+      lines = [text];
+    }
+    let baseY = 0;
+    if (textBaseline === 'middle') {
+      baseY = -(lines.length - 1) * (size + 2) / 2
+    }
+    for (let i = 0; i < lines.length; i++) {
+      ctx.fillText(lines[i], x, baseY + y + i * (size + 2));
+    }
+  },
+
+  getLines: function (ctx, text, maxWidth) {
+    var words = text.split(" ");
+    var lines = [];
+    var currentLine = words[0];
+
+    for (var i = 1; i < words.length; i++) {
+      var word = words[i];
+      var width = ctx.measureText(currentLine + " " + word).width;
+      if (width < maxWidth) {
+        currentLine += " " + word;
+      } else {
+        lines.push(currentLine);
+        currentLine = word;
+      }
+    }
+    lines.push(currentLine);
+    return lines;
+  }
+}
