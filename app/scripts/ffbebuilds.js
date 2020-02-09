@@ -82,12 +82,6 @@ const races = ['aquatic', 'beast', 'bird', 'bug', 'demon', 'dragon', 'human', 'm
 
 let currentBuild = undefined;
 
-$.getJSON("https://ffbeequip.com/GL/dataVersion.json",
-  function (data) {
-    console.log(data)
-  }
-);
-
 const getItems = async (items) => {
   return await browser.runtime.sendMessage({ type: "getItems", items });
 };
@@ -172,7 +166,18 @@ const showBuild = (buildId) => {
   );
 };
 
+const getCss = async () => {
+  return browser.runtime.sendMessage({ type: "getUnitCss" });
+};
+
+const injectCss = async () => {
+  css = await getCss();
+  style = $(`<style title="ffbepreview">${css}</style>`);
+  $('head').append(style);
+};
+
 findLinks();
+injectCss();
 
 $(document).on('mouseenter', 'a.build', function onHover() {
   const $this = $(this);

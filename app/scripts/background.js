@@ -3,6 +3,8 @@ const TIMESTAMP = "dataTimestamp";
 const VERSION = "version";
 const DATA = "data";
 
+const unitCSSRegex = /a\[href.="(#[A-Z]\/)?(Icons\/)?(\/[a-z][0-9]+\/)?"\](\:after)?(,\.flair\-[a-z0-9]+\:before)?\{[a-zA-Z0-9\."\_\(\)\:\-\;\!\s\/]+\}/g
+
 const loadData = async () => {
   return browser.storage.local.get(TIMESTAMP).then(
     (ts) => {
@@ -10,6 +12,25 @@ const loadData = async () => {
         console.log("Waiting to refresh data.");
         return;
       }
+      $.get("https://old.reddit.com/r/FFBraveExvius/",
+        (html) => {
+          dom = $.parseHTML(html);
+          stylesheet = dom.find((element) => element.title == "applied_subreddit_stylesheet").href;
+
+          $.get(stylesheet,
+            (css) => {
+              css = css.match(unitCSSRegex).join(' ');
+              browser.storage.local.set({
+                unitCss: css
+              }).then(() => {
+                console.log(`Updated CSS`);
+              }, (err) => {
+                console.log(`Error updating CSS.`, err);
+              });
+            }
+          );
+        }
+      );
       $.getJSON("https://ffbeequip.com/GL/dataVersion.json",
         function (dataVersion) {
           browser.storage.local.get(VERSION)
@@ -65,6 +86,23 @@ const handleMessages = async (request, sender, sendResponse) => {
           });
         }
       );
+    }
+    case 'getUnitCss': {
+      await loadData();
+      return browser.storage.local.get("unitCss").then(
+        (css) => {
+          css = css.unitCss;
+          console.log(`Sending CSS ${css}`);
+          return css;
+        }
+      );
+    }
+    case 'loadData': {
+      browser.storage.local.set({
+        dataTimestamp: Date.now()
+      }).then(() => {
+        loadData();
+      });
     }
   }
 };
