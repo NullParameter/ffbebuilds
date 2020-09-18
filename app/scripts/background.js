@@ -3,7 +3,7 @@ const TIMESTAMP = "dataTimestamp";
 const VERSION = "version";
 const DATA = "data";
 
-const unitCSSRegex = /a\[href.="(#[A-Z]\/)?(Icons\/)?(\/[a-z][0-9]+\/)?"\](\:after)?(,\.flair\-[a-z0-9]+\:before)?\{[a-zA-Z0-9\."\_\(\)\:\-\;\!\s\/]+\}/g
+const unitCSSRegex = /a\[href.="(#[A-Z]\/)?(Icons\/)?(\/[a-z][0-9]+(BS)?\/)?"\](\:after)?(,\.flair\-[a-z0-9]+(BS)?\:before)?\{[a-zA-Z0-9\."\_\(\)\:\-\;\!\s\/]+\}/g
 
 const loadData = async () => {
   return browser.storage.local.get(TIMESTAMP).then(
